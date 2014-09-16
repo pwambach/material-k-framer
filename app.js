@@ -2,7 +2,9 @@ var fullWidth = window.innerWidth,
 	fullHeight = window.innerHeight,
 	COLOR_BLUE = '#29ABE2',
 	COLOR_LIGHTGRAY = '#f8f8f8',
-	listLayers = [];
+	COLOR_GREEN = '#00dc61',
+	listLayers = [],
+	FAB_SIZE = 80;
 
 
 //headerLayer
@@ -133,12 +135,48 @@ for(var i = 0; i < 5; i++){
 		delay: i * 0.1
 	};
 
+	
 	listLayer.addSubLayer(listSubLayer);
 	listLayer.addSubLayer(listSubLayerText);
+
 	listSubLayer.placeBefore(listLayer);
 	listSubLayerText.placeBefore(listLayer);
+
 	listLayers.push(listLayer);
 };
+
+
+
+var fab = new Layer({
+	x: fullWidth,
+	y: 120,
+	width: FAB_SIZE,
+	height: FAB_SIZE,
+	rotationZ: 160,
+});
+fab.style = {
+	'border-radius': FAB_SIZE/2 + 'px',
+	'background-color': COLOR_GREEN,
+	'text-align': 'center',
+	'color': '#fff',
+	'padding-top': '25px'
+};
+fab.states.add({
+	list: {
+		rotationZ: 160,
+		x: fullWidth
+	},
+	big: {
+		rotationZ: 0,
+		x: fullWidth - 110
+	}
+});
+fab.states.animationOptions = {
+	curve: 'spring(170,20,10)',
+	delay: 0.15
+};
+fab.html = 'A'
+
 
 
 
@@ -185,10 +223,12 @@ listLayers.forEach(function(listLayer){
 		if(newState === 'big'){
 			listLayer.subLayers[0].states.switch('big');
 			listLayer.subLayers[1].states.switch('big');
+			fab.states.switch('big');
 		}
 		if(newState === 'list'){
 			listLayer.subLayers[0].states.switch('list');
 			listLayer.subLayers[1].states.switch('list');
+			fab.states.switch('list', {curve: 'linear', time: 0.1});
 		}
 	});
 });
