@@ -100,13 +100,43 @@ for(var i = 0; i < 5; i++){
 		'padding-top': '35px'
 	};
 
+	var listSubLayerText = new Layer({
+		width: fullWidth - 40,
+		height: 100
+	});
+	listSubLayerText.html = Math.floor((Math.random() * 100) + 80) + ' kg';
+	listSubLayerText.style = {
+		'padding-left': '140px',
+		'font-size': '50px',
+		'padding-top': '35px',
+		'color': '#cdcdcd',
+		'text-align': 'left',
+		'font-weight': 'bold',
+		'background-color': 'transparent'
+
+	};
+	listSubLayerText.states.add({
+		list: {
+			opacity: 1
+		},
+		big: {
+			opacity: 0
+		}
+	});
+	listSubLayerText.states.animationOptions = listSubLayer.states.animationOptions = {
+		curve: 'linear',
+		time: 0
+	};
+
 	listLayer.states.animationOptions = listSubLayer.states.animationOptions = {
-		curve: "spring(130,20,10)",
+		curve: 'spring(130,20,10)',
 		delay: i * 0.1
 	};
 
 	listLayer.addSubLayer(listSubLayer);
+	listLayer.addSubLayer(listSubLayerText);
 	listSubLayer.placeBefore(listLayer);
+	listSubLayerText.placeBefore(listLayer);
 	listLayers.push(listLayer);
 };
 
@@ -154,9 +184,11 @@ listLayers.forEach(function(listLayer){
 	listLayer.states.on(Events.StateWillSwitch, function(oldState, newState){
 		if(newState === 'big'){
 			listLayer.subLayers[0].states.switch('big');
+			listLayer.subLayers[1].states.switch('big');
 		}
 		if(newState === 'list'){
 			listLayer.subLayers[0].states.switch('list');
+			listLayer.subLayers[1].states.switch('list');
 		}
 	});
 });
