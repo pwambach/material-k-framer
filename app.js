@@ -50,7 +50,7 @@ for(var i = 0; i < 5; i++){
 	});
 	listLayer.style = {
 		'background-color': COLOR_LIGHTGRAY,
-		'box-shadow': '2px 4px 8px rgba(0,0,0,0.1)'
+		'box-shadow': '1px 2px 8px rgba(0,0,0,0.2)'
 	};
 	listLayer.states.add({
 		list: {
@@ -159,7 +159,8 @@ fab.style = {
 	'background-color': COLOR_GREEN,
 	'text-align': 'center',
 	'color': '#fff',
-	'padding-top': '25px'
+	'padding-top': '25px',
+	'box-shadow': '1px 2px 4px rgba(0,0,0,0.2)'
 };
 fab.states.add({
 	list: {
