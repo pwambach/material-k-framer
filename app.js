@@ -159,6 +159,7 @@ fab.style = {
 	'background-color': COLOR_GREEN,
 	'text-align': 'center',
 	'color': '#fff',
+	'font-size': '32px',
 	'padding-top': '25px',
 	'box-shadow': '1px 2px 4px rgba(0,0,0,0.2)'
 };
@@ -176,7 +177,29 @@ fab.states.animationOptions = {
 	curve: 'spring(170,20,10)',
 	delay: 0.15
 };
-fab.html = 'A'
+fab.html = '<i class="fa fa-check"></i>'
+
+
+var menuIcon = new Layer({
+	width: 30,
+	height: 30,
+	x: 20,
+	y: 13,
+	backgroundColor: 'transparent'
+});
+menuIcon.style = {
+	'color': 'white',
+	'font-size': '30px',
+	'padding': '1px'
+};
+menuIcon.html = '<i class="fa fa-bars"></i>';
+menuIcon.states.add({
+	hidden: {y: -40},
+	visible: {y: 13}
+});
+menuIcon.states.animationOptions = {
+	curve: 'spring(100,20,10)'
+};
 
 
 
@@ -223,13 +246,17 @@ listLayers.forEach(function(listLayer){
 	listLayer.states.on(Events.StateWillSwitch, function(oldState, newState){
 		if(newState === 'big'){
 			listLayer.subLayers[0].states.switch('big');
+			listLayer.subLayers[0].style = {'padding-top': '100px'};
 			listLayer.subLayers[1].states.switch('big');
 			fab.states.switch('big');
+			menuIcon.states.switch('hidden');
 		}
 		if(newState === 'list'){
 			listLayer.subLayers[0].states.switch('list');
+			listLayer.subLayers[0].style = {'padding-top': '35px'};
 			listLayer.subLayers[1].states.switch('list');
 			fab.states.switch('list', {curve: 'linear', time: 0.1});
+			menuIcon.states.switch('visible');
 		}
 	});
 });
