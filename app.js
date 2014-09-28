@@ -1,6 +1,6 @@
-var fullWidth = window.innerWidth,
+var fullWidth = window.innerWidth + 1,
 	fullHeight = window.innerHeight,
-	COLOR_BLUE = '#29ABE2',
+	COLOR_BLUE = '#2B8AE0',
 	COLOR_LIGHTGRAY = '#f8f8f8',
 	COLOR_GREEN = '#00dc61',
 	listLayers = [],
@@ -40,8 +40,19 @@ headerLayer.draggable.enabled = true;
 headerLayer.draggable.speedX = 0;
 
 
+var scrollLayer = new Layer({
+	x: 0,
+	y: 0,
+	width: fullWidth,
+	height: fullHeight,
+	backgroundColor: '#eee'
+});
+scrollLayer.scroll = true;
+headerLayer.placeBefore(scrollLayer);
+
+
 //generate listLayers
-for(var i = 0; i < 5; i++){
+for(var i = 0; i < 10; i++){
 	var listLayer = new Layer({
 		x: 20,
 		y: 800,
@@ -113,7 +124,6 @@ for(var i = 0; i < 5; i++){
 		'padding-top': '35px',
 		'color': '#cdcdcd',
 		'text-align': 'left',
-		'font-weight': 'bold',
 		'background-color': 'transparent'
 
 	};
@@ -142,6 +152,7 @@ for(var i = 0; i < 5; i++){
 	listSubLayer.placeBefore(listLayer);
 	listSubLayerText.placeBefore(listLayer);
 
+	scrollLayer.addSubLayer(listLayer);
 	listLayers.push(listLayer);
 };
 
@@ -204,12 +215,11 @@ menuIcon.states.animationOptions = {
 
 
 
-
-
-headerLayer.on(Events.DragEnd, function() {
+var handleHeaderDrag = function(){
 	if(headerLayer.y < -200){
 		headerLayer.states.switch('small');
 		headerLayer.draggable.enabled = false;
+		headerLayer.off(Events.DragEnd, handleHeaderDrag);
 		listLayers.forEach(function(listLayer, index){
 			listLayer.states.switch('list');
 			if(index > 0){
@@ -221,7 +231,8 @@ headerLayer.on(Events.DragEnd, function() {
 	} else {
 		headerLayer.states.switch('start');
 	}
-});
+}
+headerLayer.on(Events.DragEnd, handleHeaderDrag);
 
 
 listLayers.forEach(function(listLayer){
