@@ -236,18 +236,21 @@ headerLayer.on(Events.DragEnd, handleHeaderDrag);
 
 
 listLayers.forEach(function(listLayer){
-	listLayer.on(Events.Click, function(){
+	listLayer.on('click', function(){
 
 		var state = listLayer.states.current;
 
 		if(state === 'list'){
 			headerLayer.states.switch('gone');
 			listLayer.states.animationOptions.delay = 0;
+			scrollLayer.removeSubLayer(listLayer);
+			fab.bringToFront();
 			listLayer.states.switch('big');
 			hideOtherListLayers(listLayer);	
 		}
 		if(state === 'big'){
 			headerLayer.states.switch('small');
+			scrollLayer.addSubLayer(listLayer);
 			listLayers.forEach(function(layer){
 				layer.states.switch('list');
 			});
