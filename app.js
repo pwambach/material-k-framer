@@ -66,14 +66,14 @@ for(var i = 0; i < 10; i++){
 	};
 	listLayer.states.add({
 		list: {
-			y: 80 + (i * 110),
+			y: 80 + (i * 115),
 			x: 20,
 			width: fullWidth - 40,
 			height: 100,
 			opacity: 1
 		},
 		big: {
-			height: 160,
+			height: 140,
 			width: fullWidth,
 			y: 0,
 			x: 0,
@@ -92,7 +92,7 @@ for(var i = 0; i < 10; i++){
 	});
 	listSubLayer.states.add({
 		big: {
-			height: 160,
+			height: 140,
 			width: fullWidth,
 			y: 0,
 			x: 0
@@ -123,8 +123,9 @@ for(var i = 0; i < 10; i++){
 		'padding-left': '140px',
 		'font-size': '50px',
 		'padding-top': '35px',
+		'padding-right': '60px',
 		'color': '#cdcdcd',
-		'text-align': 'left',
+		'text-align': 'right',
 		'background-color': 'transparent'
 
 	};
@@ -161,7 +162,7 @@ for(var i = 0; i < 10; i++){
 
 var fab = new Layer({
 	x: fullWidth + 6,
-	y: 120,
+	y: 100,
 	width: FAB_SIZE,
 	height: FAB_SIZE,
 	rotationZ: 160,
@@ -265,7 +266,7 @@ var buildBox = function(y, faicon, height){
 		'border-radius': '50%',
 		'color': COLOR_GRAY,
 		'font-size': '26px',
-		'padding': '9px'
+		'padding': '11px'
 	};
 	icon.html = '<i class="fa fa-' + faicon + '"></i>';
 	layer.addSubLayer(icon);
@@ -282,7 +283,7 @@ var buildBox = function(y, faicon, height){
 	return layer;
 };
 
-var timeBox = buildBox(200, 'rocket');
+var timeBox = buildBox(180, 'rocket');
 timeBox.subLayers[1].html = '- &nbsp;<span style="color: #aaa">123</span>&nbsp; +';
 timeBox.subLayers[1].backgroundColor = 'transparent';
 timeBox.subLayers[1].style = {
@@ -292,7 +293,7 @@ timeBox.subLayers[1].style = {
 	'color': '#cdcdcd'
 };
 
-var weightBox = buildBox(320, 'times');
+var weightBox = buildBox(300, 'times');
 weightBox.subLayers[1].html = '- <span style="color: #aaa">&nbsp;90 s&nbsp;</span> +';
 weightBox.subLayers[1].backgroundColor = 'transparent';
 weightBox.subLayers[1].style = {
@@ -302,7 +303,7 @@ weightBox.subLayers[1].style = {
 	'color': '#cdcdcd'
 };
 
-var settingsBox = buildBox(440, 'car', 140);
+var settingsBox = buildBox(420, 'car', 140);
 settingsBox.subLayers[1].html = 'aksdhdakjsdh: <span style="float:right">2</span><br/>jsdkhasd: <span style="float:right">53</span></br>dasdasdhkj: <span style="float:right">10</span></br>kkjjkjsnh: <span style="float:right">2</span>';
 settingsBox.subLayers[1].backgroundColor = 'transparent';
 settingsBox.subLayers[1].height = 140;
@@ -397,7 +398,7 @@ listLayers.forEach(function(listLayer){
 	listLayer.states.on(Events.StateWillSwitch, function(oldState, newState){
 		if(newState === 'big'){
 			listLayer.subLayers[0].states.switch('big');
-			listLayer.subLayers[0].style = {'padding-top': '100px'};
+			listLayer.subLayers[0].style = {'padding-top': '90px'};
 			listLayer.subLayers[1].states.switch('big');
 			fab.states.switch('big');
 			menuIcon.states.switch('hidden');
@@ -431,11 +432,23 @@ listLayers.forEach(function(listLayer){
 
 
 var hideOtherListLayers = function(bigListLayer){
+	var origOptions = bigListLayer.states.animationOptions;
+
+	
+
 	listLayers.forEach(function(listLayer){
+
 		if(listLayer !== bigListLayer){
+			var origOptions = listLayer.states.animationOptions;
+			listLayer.states.animationOptions = {
+				curve: 'linear',
+				time: 0
+			}
 			listLayer.states.switch('hidden');
+			listLayer.states.animationOptions = origOptions;
 		}
 	});
+
 };
 
 
