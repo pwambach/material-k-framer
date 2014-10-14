@@ -2,6 +2,7 @@ var fullWidth = window.innerWidth + 1,
 	fullHeight = window.innerHeight,
 	COLOR_BLUE = '#2B8AE0',
 	COLOR_LIGHTGRAY = '#f8f8f8',
+	COLOR_GRAY = '#999',
 	COLOR_GREEN = '#00dc61',
 	listLayers = [],
 	FAB_SIZE = 80;
@@ -117,7 +118,7 @@ for(var i = 0; i < 10; i++){
 		width: fullWidth - 40,
 		height: 100
 	});
-	listSubLayerText.html = Math.floor((Math.random() * 100) + 80) + ' kg';
+	listSubLayerText.html = Math.floor((Math.random() * 100) + 80) + ' x';
 	listSubLayerText.style = {
 		'padding-left': '140px',
 		'font-size': '50px',
@@ -159,7 +160,7 @@ for(var i = 0; i < 10; i++){
 
 
 var fab = new Layer({
-	x: fullWidth,
+	x: fullWidth + 6,
 	y: 120,
 	width: FAB_SIZE,
 	height: FAB_SIZE,
@@ -177,7 +178,7 @@ fab.style = {
 fab.states.add({
 	list: {
 		rotationZ: 160,
-		x: fullWidth
+		x: fullWidth + 6
 	},
 	big: {
 		rotationZ: 0,
@@ -201,6 +202,7 @@ var menuIcon = new Layer({
 menuIcon.style = {
 	'color': 'white',
 	'font-size': '30px',
+	'font-weight': 'normal',
 	'padding': '1px'
 };
 menuIcon.html = '<i class="fa fa-bars"></i>';
@@ -212,6 +214,136 @@ menuIcon.states.animationOptions = {
 	curve: 'spring(100,20,10)'
 };
 
+var backIcon = new Layer({
+	width: 25,
+	height: 25,
+	x: 20,
+	y: -40,
+	opacity: 0,
+	backgroundColor: 'transparent'
+});
+backIcon.style = {
+	'color': 'white',
+	'font-size': '25px',
+	'padding': '1px'
+};
+backIcon.html = '<i class="fa fa-arrow-left"></i>';
+backIcon.states.add({
+	hidden: {
+		y: -40,
+		opacity: 0
+	},
+	visible: {
+		y: 13,
+		opacity: 1
+	}
+});
+backIcon.states.animationOptions = {
+	curve: 'spring(100,20,10)'
+};
+
+var buildBox = function(y, faicon, height){
+	var _height = height || 120
+	var layer = new Layer({
+		width: fullWidth - 40,
+		height: _height,
+		backgroundColor: 'transparent',
+		x: 20,
+		y: y,
+		opacity: 0
+	});
+	layer.style = {'border-bottom': '1px solid #ddd'};
+	var icon = new Layer({
+		width: 50,
+		height: 50,
+		x: 10,
+		y: 37,
+		backgroundColor: 'white'
+	});
+	icon.style = {
+		'box-shadow': '1px 2px 4px rgba(0,0,0,0.2)',
+		'border-radius': '50%',
+		'color': COLOR_GRAY,
+		'font-size': '26px',
+		'padding': '9px'
+	};
+	icon.html = '<i class="fa fa-' + faicon + '"></i>';
+	layer.addSubLayer(icon);
+	layer.states.add({
+		hidden: {y: y+80, opacity: 0},
+		visible: {y: y, opacity: 1}
+	});
+	var content = new Layer({
+	width: fullWidth - 130,
+	height: 120,
+	x: 90
+	});
+	layer.addSubLayer(content);
+	return layer;
+};
+
+var timeBox = buildBox(200, 'rocket');
+timeBox.subLayers[1].html = '- &nbsp;<span style="color: #aaa">123</span>&nbsp; +';
+timeBox.subLayers[1].backgroundColor = 'transparent';
+timeBox.subLayers[1].style = {
+	'text-align': 'center',
+	'padding': '46px 0 0 0',
+	'font-size': '50px',
+	'color': '#cdcdcd'
+};
+
+var weightBox = buildBox(320, 'times');
+weightBox.subLayers[1].html = '- <span style="color: #aaa">&nbsp;90 s&nbsp;</span> +';
+weightBox.subLayers[1].backgroundColor = 'transparent';
+weightBox.subLayers[1].style = {
+	'text-align': 'center',
+	'padding': '46px 0 0 0',
+	'font-size': '50px',
+	'color': '#cdcdcd'
+};
+
+var settingsBox = buildBox(440, 'car', 140);
+settingsBox.subLayers[1].html = 'aksdhdakjsdh: <span style="float:right">2</span><br/>jsdkhasd: <span style="float:right">53</span></br>dasdasdhkj: <span style="float:right">10</span></br>kkjjkjsnh: <span style="float:right">2</span>';
+settingsBox.subLayers[1].backgroundColor = 'transparent';
+settingsBox.subLayers[1].height = 140;
+settingsBox.subLayers[1].style = {
+	'border-bottom': 'none',
+	'color': '#aaa',
+	'font-size': '15px',
+	'padding': '30px 0 0 0'
+}
+settingsBox.style = {'border-bottom': 'none'};
+
+
+var timeBoxAnimationOptionsIn = {
+	curve: 'spring(100,20,10)',
+	delay: 0.1
+};
+var weightBoxAnimationOptionsIn = {
+	curve: 'spring(100,20,10)',
+	delay: 0.15
+};
+var settingsBoxAnimationOptionsIn = {
+	curve: 'spring(100,20,10)',
+	delay: 0.2	
+}
+
+var timeBoxAnimationOptionsOut = {
+	curve: 'linear',
+	time: 0
+};
+var weightBoxAnimationOptionsOut = {
+	curve: 'linear',
+	time: 0
+};
+var settingsBoxAnimationOptionsOut = {
+	curve: 'linear',
+	time: 0
+};
+
+weightBox.states.animationOptions = weightBoxAnimationOptionsIn;
+timeBox.states.animationOptions = timeBoxAnimationOptionsIn;
+settingsBox.states.animationOptions = settingsBoxAnimationOptionsIn;
 
 
 
@@ -234,6 +366,7 @@ var handleHeaderDrag = function(){
 }
 headerLayer.on(Events.DragEnd, handleHeaderDrag);
 
+var scrollOffset;
 
 listLayers.forEach(function(listLayer){
 	listLayer.on('click', function(){
@@ -243,7 +376,11 @@ listLayers.forEach(function(listLayer){
 		if(state === 'list'){
 			headerLayer.states.switch('gone');
 			listLayer.states.animationOptions.delay = 0;
+			
+			scrollOffset = scrollLayer.scrollY;
 			scrollLayer.removeSubLayer(listLayer);
+			listLayer.y = listLayer.y - scrollOffset;
+			
 			fab.bringToFront();
 			listLayer.states.switch('big');
 			hideOtherListLayers(listLayer);	
@@ -264,6 +401,12 @@ listLayers.forEach(function(listLayer){
 			listLayer.subLayers[1].states.switch('big');
 			fab.states.switch('big');
 			menuIcon.states.switch('hidden');
+			backIcon.states.switch('visible');
+			backIcon.bringToFront();
+
+			timeBox.states.switch('visible');
+			weightBox.states.switch('visible');
+			settingsBox.states.switch('visible');
 		}
 		if(newState === 'list'){
 			listLayer.subLayers[0].states.switch('list');
@@ -271,6 +414,17 @@ listLayers.forEach(function(listLayer){
 			listLayer.subLayers[1].states.switch('list');
 			fab.states.switch('list', {curve: 'linear', time: 0.1});
 			menuIcon.states.switch('visible');
+			backIcon.states.switch('hidden');
+
+			weightBox.states.animationOptions = weightBoxAnimationOptionsOut;
+			timeBox.states.animationOptions = timeBoxAnimationOptionsOut;
+			settingsBox.states.animationOptions = settingsBoxAnimationOptionsOut;
+			timeBox.states.switch('hidden');
+			weightBox.states.switch('hidden');
+			settingsBox.states.switch('hidden');
+			timeBox.states.animationOptions = timeBoxAnimationOptionsIn;
+			weightBox.states.animationOptions = weightBoxAnimationOptionsIn;
+			settingsBox.states.animationOptions = settingsBoxAnimationOptionsIn;
 		}
 	});
 });
