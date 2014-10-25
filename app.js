@@ -17,7 +17,7 @@ var headerLayer = new Layer({
 	height: fullHeight - (fullHeight/5)
 });
 headerLayer.pixelAlign();
-headerLayer.html = '<i class="fa fa-car"></i>';
+headerLayer.html = '<i class="fa fa-paper-plane-o"></i>';
 headerLayer.style = {
 	'padding': '164px 0 0 82px',
 	'color': '#0B6AC0',
@@ -35,12 +35,10 @@ headerLayer.states.add({
 		height: fullHeight - (fullHeight/5)
 	},
 	small: {
-		y: -452,
-		//height: 60
+		y: -452
 	},
 	gone: {
 		y: -550
-		//height: 0
 	}
 });
 headerLayer.draggable.enabled = true;
@@ -63,7 +61,7 @@ var scrollUpLabel = new Layer({
 	x: 0,
 	y: 520
 });
-scrollUpLabel.html = '<i class="fa fa-chevron-up"></i><br />Start Session';
+scrollUpLabel.html = '<i class="fa fa-angle-double-up"></i><br/><span style="display:inline-block; padding-top: 8px">Start Session</span>';
 scrollUpLabel.style = {
 	'background-color': 'transparent',
 	'color': '#aaa',
@@ -127,15 +125,27 @@ for(var i = 0; i < 9; i++){
 			height: 100
 		}
 	}),
-	listSubLayer.html = 'A' + (i+1);
+	//listSubLayer.html = 'A' + (i+1);
 	listSubLayer.style = {
 		'color': 'white',
 		'background-color': COLOR_BLUE,
 		'font-size': '50px',
-		'text-align': 'left',
+		'text-align': 'left'
+	};
+	listSubLayerAText = new Layer({
+		width: 100,
+		height: 100,
+		backgroundColor: 'transparent'
+	});
+	listSubLayerAText.html = 'A' + (i+1);
+	listSubLayerAText.style = {
+		'color': 'white',
+		'font-size': '50px',
 		'padding-left': '20px',
 		'padding-top': '35px'
 	};
+	listSubLayer.addSubLayer(listSubLayerAText);
+
 
 	var listSubLayerText = new Layer({
 		width: fullWidth - 40,
@@ -214,6 +224,44 @@ fab.states.animationOptions = {
 	delay: 0.15
 };
 fab.html = '<i class="fa fa-check"></i>'
+fab.on(Events.Click, function(event, layer){
+	event.preventDefault();
+	var tmp = new Layer({
+		width: 10,
+		height: 10,
+		backgroundColor: '#00cc51',
+		x: fullWidth - 40,
+		y: 180
+	});
+	tmp.style = {
+		'border-radius': '50%'
+	};
+	var animation = new Animation({
+  	  	layer: tmp,
+    	properties: {
+    		width: 1000,
+    		height: 1000,
+    		x: -500,
+    		y: -500
+    	},
+    	curve: 'ease-in-out',
+    	time: 0.6
+	});
+	listLayers[openIndex].subLayers[0].addSubLayer(tmp);
+	var aLabel = listLayers[openIndex].subLayers[0].subLayers[0];
+	aLabel.placeBefore(tmp);
+	animation.start();
+	tmp.on(Events.AnimationEnd, function(){
+		listLayers[openIndex].subLayers[0].backgroundColor = '#00cc51';	
+		tmp.destroy();
+
+		headerLayer.states.switch('small');
+		scrollLayer.addSubLayer(listLayers[openIndex]);
+		listLayers.forEach(function(layer){
+			layer.states.switch('list');
+		});
+	});
+});
 
 
 var menuIcon = new Layer({
@@ -248,10 +296,10 @@ var backIcon = new Layer({
 });
 backIcon.style = {
 	'color': 'white',
-	'font-size': '25px',
+	'font-size': '30px',
 	'padding': '1px'
 };
-backIcon.html = '<i class="fa fa-arrow-left"></i>';
+backIcon.html = '<i class="fa fa-angle-left"></i>';
 backIcon.states.add({
 	hidden: {
 		y: -40,
@@ -307,7 +355,7 @@ var buildBox = function(y, faicon, height){
 	return layer;
 };
 
-var timeBox = buildBox(160, 'rocket');
+var timeBox = buildBox(160, 'trophy');
 timeBox.subLayers[1].html = 'B123';
 timeBox.subLayers[1].backgroundColor = 'transparent';
 timeBox.subLayers[1].style = {
@@ -317,7 +365,7 @@ timeBox.subLayers[1].style = {
 	'color': '#cdcdcd'
 };
 
-var weightBox = buildBox(280, 'times');
+var weightBox = buildBox(280, 'heart');
 weightBox.subLayers[1].html = 'C180';
 weightBox.subLayers[1].backgroundColor = 'transparent';
 weightBox.subLayers[1].style = {
@@ -326,8 +374,9 @@ weightBox.subLayers[1].style = {
 	'font-size': '50px',
 	'color': '#cdcdcd'
 };
+weightBox.subLayers[0].x -= 1;
 
-var settingsBox = buildBox(400, 'car', 160);
+var settingsBox = buildBox(400, 'gear', 160);
 settingsBox.subLayers[1].html = 'Style A: <span style="float:right">2</span><br/>Style B: <span style="float:right">53</span></br>Style C: <span style="float:right">10</span></br>Style D: <span style="float:right">2</span>';
 settingsBox.subLayers[1].backgroundColor = 'transparent';
 settingsBox.subLayers[1].height = 160;
@@ -376,6 +425,7 @@ var handleHeaderDrag = function(){
 	if(headerLayer.y < -200){
 		headerLayer.states.switch('small');
 		scrollUpLabel.opacity = 0;
+		scrollUpLabel.y = 520;
 		headerLayer.draggable.enabled = false;
 		headerLayer.off(Events.DragEnd, handleHeaderDrag);
 		listLayers.forEach(function(listLayer, index){
@@ -388,6 +438,8 @@ var handleHeaderDrag = function(){
 		});
 	} else {
 		headerLayer.states.switch('start');
+		scrollUpLabel.opacity = 1;
+		scrollUpLabel.y = 520;
 	}
 }
 
@@ -395,10 +447,14 @@ var handleHeaderDragMove = function(event, layer){
 	if(layer.y < -452){
 		layer.y = -452;
 	}
+	if(layer.y > 0){
+		layer.y = 0;
+	}
 	var distance = 20 + 452;
 	var way = layer.y + 20;
-	var perCent = (1-(way/distance*(-1)))*0.9;
+	var perCent = (1-(way/distance*(-1)))*0.8;
 	scrollUpLabel.opacity = perCent;
+	scrollUpLabel.y = -scrollUpLabel.y + (100 * perCent);
 }
 
 headerLayer.on(Events.DragEnd, handleHeaderDrag);
@@ -439,7 +495,7 @@ listLayers.forEach(function(listLayer){
 	listLayer.states.on(Events.StateWillSwitch, function(oldState, newState){
 		if(newState === 'big'){
 			listLayer.subLayers[0].states.switch('big');
-			listLayer.subLayers[0].style = {'padding-top': '90px'};
+			listLayer.subLayers[0].style = {'padding-top': '50px'};
 			listLayer.subLayers[1].states.switch('big');
 			fab.states.switch('big');
 			menuIcon.states.switch('hidden');
@@ -452,7 +508,7 @@ listLayers.forEach(function(listLayer){
 		}
 		if(newState === 'list'){
 			listLayer.subLayers[0].states.switch('list');
-			listLayer.subLayers[0].style = {'padding-top': '35px'};
+			listLayer.subLayers[0].style = {'padding-top': '0px'};
 			listLayer.subLayers[1].states.switch('list');
 			fab.states.switch('list', {curve: 'linear', time: 0.1});
 			menuIcon.states.switch('visible');
