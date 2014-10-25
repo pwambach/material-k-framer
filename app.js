@@ -53,7 +53,7 @@ headerLayer.placeBefore(scrollLayer);
 
 
 //generate listLayers
-for(var i = 0; i < 10; i++){
+for(var i = 0; i < 9; i++){
 	var listLayer = new Layer({
 		x: 20,
 		y: 800,
