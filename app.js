@@ -19,7 +19,7 @@ var headerLayer = new Layer({
 headerLayer.pixelAlign();
 headerLayer.html = '<i class="fa fa-paper-plane-o"></i>';
 headerLayer.style = {
-	'padding': '164px 0 0 82px',
+	'padding': '170px 0 0 82px',
 	'color': '#0B6AC0',
 	'font-size': '200px',
 	'background-color': COLOR_BLUE,
@@ -245,7 +245,7 @@ fab.on(Events.Click, function(event, layer){
     		y: -500
     	},
     	curve: 'ease-in-out',
-    	time: 0.6
+    	time: 0.4
 	});
 	listLayers[openIndex].subLayers[0].addSubLayer(tmp);
 	var aLabel = listLayers[openIndex].subLayers[0].subLayers[0];
@@ -255,11 +255,14 @@ fab.on(Events.Click, function(event, layer){
 		listLayers[openIndex].subLayers[0].backgroundColor = '#00cc51';	
 		tmp.destroy();
 
-		headerLayer.states.switch('small');
-		scrollLayer.addSubLayer(listLayers[openIndex]);
-		listLayers.forEach(function(layer){
-			layer.states.switch('list');
+		Utils.delay(0.1, function(){
+			headerLayer.states.switch('small');
+			scrollLayer.addSubLayer(listLayers[openIndex]);
+			listLayers.forEach(function(layer){
+				layer.states.switch('list');
+			});
 		});
+		
 	});
 });
 
