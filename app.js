@@ -45,6 +45,7 @@ headerLayer.draggable.enabled = true;
 headerLayer.draggable.speedX = 0;
 
 
+//scroll Layer
 var scrollLayer = new Layer({
 	x: 0,
 	y: 0,
@@ -55,6 +56,9 @@ var scrollLayer = new Layer({
 scrollLayer.scroll = true;
 headerLayer.placeBefore(scrollLayer);
 
+
+
+//new session label layer
 var scrollUpLabel = new Layer({
 	width: fullWidth,
 	height: 80,
@@ -70,7 +74,6 @@ scrollUpLabel.style = {
 	'font-weight': 'lighter',
 	'font-family': 'Helvetica Neue, Arial'
 };
-
 
 
 //generate listLayers
@@ -125,7 +128,6 @@ for(var i = 0; i < 9; i++){
 			height: 100
 		}
 	}),
-	//listSubLayer.html = 'A' + (i+1);
 	listSubLayer.style = {
 		'color': 'white',
 		'background-color': COLOR_BLUE,
@@ -193,6 +195,7 @@ for(var i = 0; i < 9; i++){
 
 
 
+//fab layer
 var fab = new Layer({
 	x: fullWidth + 6,
 	y: 100,
@@ -267,6 +270,7 @@ fab.on(Events.Click, function(event, layer){
 });
 
 
+//menu icon
 var menuIcon = new Layer({
 	width: 30,
 	height: 30,
@@ -289,6 +293,8 @@ menuIcon.states.animationOptions = {
 	curve: 'spring(100,20,10)'
 };
 
+
+//back icon
 var backIcon = new Layer({
 	width: 25,
 	height: 25,
@@ -317,6 +323,8 @@ backIcon.states.animationOptions = {
 	curve: 'spring(100,20,10)'
 };
 
+
+//detail box
 var buildBox = function(y, faicon, height){
 	var _height = height || 120
 	var layer = new Layer({
@@ -333,12 +341,9 @@ var buildBox = function(y, faicon, height){
 		height: 50,
 		x: 10,
 		y: 37,
-		//backgroundColor: 'white'
 		backgroundColor: 'transparent'
 	});
 	icon.style = {
-		//'box-shadow': '1px 2px 4px rgba(0,0,0,0.2)',
-		//'border-radius': '50%',
 		'color': COLOR_GRAY,
 		'font-size': '26px',
 		'padding': '11px'
@@ -424,6 +429,9 @@ settingsBox.states.animationOptions = settingsBoxAnimationOptionsIn;
 
 
 
+
+
+//listeners
 var handleHeaderDrag = function(){
 	if(headerLayer.y < -200){
 		headerLayer.states.switch('small');
