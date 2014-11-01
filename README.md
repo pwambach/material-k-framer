@@ -1,4 +1,6 @@
 material-k-framer
 =================
 
-Framer Prototype for material design animations
+Framer prototype for material design like animations made with http://framerjs.com/
+
+Demo Video: http://youtu.be/nByhiFfPQjQ
