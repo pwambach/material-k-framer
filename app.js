@@ -432,6 +432,8 @@ settingsBox.states.animationOptions = settingsBoxAnimationOptionsIn;
 
 
 //listeners
+
+//drag header
 var handleHeaderDrag = function(){
 	if(headerLayer.y < -200){
 		headerLayer.states.switch('small');
@@ -473,6 +475,8 @@ headerLayer.on(Events.DragMove, handleHeaderDragMove);
 
 var scrollOffset;
 
+
+//click on list item
 listLayers.forEach(function(listLayer){
 	listLayer.on('click', function(){
 
